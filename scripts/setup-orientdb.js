@@ -1,6 +1,6 @@
 const execa = require('execa');
 const axios = require('axios');
-const pWaitFor = require('p-wait-for');
+const pRetry = require('p-retry');
 
 checkDockerIsInstalled();
 killAllContainers();
@@ -12,17 +12,13 @@ launchContainer('orientdb', 'orientdb', [
     ORIENTDB_ROOT_PASSWORD: 'password'
 });
 
-pWaitFor(isOrientDbUp)
-.then(() => {
-    console.log('server up');
-    axios.post('http://localhost:2480/database/default/plocal', {}, {
+pRetry(() => {
+    console.log('server starting');
+    return axios.post('http://localhost:2480/database/default/plocal', {}, {
         auth: {
             username: 'root',
             password: 'password'
         }
-    })
-    .catch(err => {
-        console.log(err);
     });
 });
 
@@ -74,13 +70,4 @@ function execute() {
     }
 
     return result;
-}
-
-function isOrientDbUp() {
-    return axios.get('http://localhost:2480')
-        .then(() => true)
-        .catch(() => {
-            console.log('server starting');
-            return false;
-        });
 }
