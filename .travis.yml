@@ -1,0 +1,11 @@
+sudo: required
+services:
+- docker
+language: node_js
+node_js:
+  - '6'
+  - '4'
+before_script:
+- 'npm run setup-orientdb'
+after_script:
+  - 'cat coverage/lcov.info | ./node_modules/.bin/coveralls'

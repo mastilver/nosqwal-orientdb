@@ -1,0 +1,62 @@
+{
+  "name": "nosqwal-orientdb",
+  "version": "0.0.0",
+  "description": "Nosqwal adapter for Orientdb",
+  "license": "MIT",
+  "repository": "mastilver/nosqwal-orientdb",
+  "author": {
+    "name": "Thomas Sileghem",
+    "email": "th.sileghem@gmail.com",
+    "url": "mastilver.com"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "test": "xo && nyc ava",
+    "postinstall": "rm -rf test && cp -r node_modules/nosqwal-test/test test",
+    "setup-orientdb": "node scripts/setup-orientdb.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    ""
+  ],
+  "dependencies": {
+    "orientjs": "^2.2.4"
+  },
+  "devDependencies": {
+    "ava": "^0.15.2",
+    "axios": "^0.15.3",
+    "coveralls": "^2.11.12",
+    "execa": "^0.5.0",
+    "nosqwal-test": "^0.3.0",
+    "nyc": "^7.1.0",
+    "p-wait-for": "^1.0.0",
+    "xo": "^0.16.0"
+  },
+  "xo": {
+    "esnext": true,
+    "space": 4,
+    "ignores": [
+      "test/**"
+    ],
+    "rules": {
+      "ava/no-ignored-test-files": "off",
+      "eqeqeq": "off",
+      "no-eq-null": "off"
+    }
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text"
+    ]
+  },
+  "ava": {
+    "require": [
+      "./setup-test.js"
+    ]
+  }
+}
