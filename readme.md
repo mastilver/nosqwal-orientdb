@@ -15,7 +15,7 @@ $ npm install --save nosqwal-orientdb
 
 ```js
 const nosqwalOrientdb = require('nosqwal-orientdb');
-const db = nosqwalCouchbase();
+const db = nosqwalOrientdb();
 
 const userCollection = db.defineCollection('user');
 
@@ -30,7 +30,7 @@ userCollection.query()
 
 ## API
 
-### nosqwalCouchbase([options])
+### nosqwalOrientdb([options])
 
 Retuns a noSqwal instance, see api [here](https://github.com/mastilver/nosqwal#api)
 
@@ -44,7 +44,7 @@ Hostname of the server
 
 #### options.port
 
-Type: `number`
+Type: `number`<br>
 Default: `2424`
 
 Port of the server
@@ -52,15 +52,15 @@ Port of the server
 
 #### options.dbName
 
-Type: `string`
-Default: 'default'
+Type: `string`<br>
+Default: `default`
 
 Database name
 
 
 #### options.user
 
-Type: `string`
+Type: `string`<br>
 Default: `admin`
 
 Username to connect to the database
@@ -68,7 +68,7 @@ Username to connect to the database
 
 #### options.password
 
-Type: `string`
+Type: `string`<br>
 Default: `admin`
 
 Password to connect to the database
