@@ -19,12 +19,24 @@ const db = nosqwalOrientdb();
 
 const userCollection = db.defineCollection('user');
 
-userCollection.query()
+userCollection.create({
+    username: 'Alice',
+    password: '*****'
+})
+.then(alice => {
+    return userCollection.query(
+        where: {
+            username: {
+                $eq: 'Alice'
+            }
+        },
+        limit: 1
+    });
+})
 .then(users => {
-    console.log(users);
-    // => []
+    console.log(users[0].username);
+    //=> 'Alice'
 });
-
 ```
 
 
