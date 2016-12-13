@@ -61,10 +61,82 @@ module.exports = function (options) {
                         });
                 },
 
-                query(/* queryOptions */) {
+                query(queryOptions) {
+                    queryOptions = queryOptions || {};
 
+                    const sql = buildQuery(collectionName, queryOptions);
+
+                    return db.query(sql.query, {
+                        params: sql.params
+                    });
                 }
             };
         }
     };
 };
+
+function buildQuery(collectionName, queryOptions) {
+    const where = queryOptions.where || {};
+    const limit = queryOptions.limit;
+    const offset = queryOptions.offset || 0;
+    const orderBy = queryOptions.orderBy || [];
+
+    const queryParams = [];
+    let queryString = `
+        SELECT * from ${collectionName}
+    `;
+
+    const whereString = Object.keys(where).map(prop => {
+        const operator = Object.keys(where[prop])[0];
+
+        switch (operator) {
+            case '$eq': {
+                const paramId = addParams(where[prop].$eq);
+                return `
+                    ${prop} = :${paramId}
+                `;
+            }
+            default:
+                throw new Error(`Operator: ${operator} not handled`);
+        }
+    })
+    .join(' AND ');
+
+    if (whereString != '') {
+        queryString += ` WHERE ${whereString}`;
+    }
+
+    orderBy.forEach(order => {
+        const asc = order[1] == null || order[1] === true;
+
+        queryString += `
+            ORDER BY ${order[0]} ${asc ? 'ASC' : 'DESC'}
+        `;
+    });
+
+    if (limit != null) {
+        queryString += `
+            LIMIT ${limit}
+        `;
+
+        if (offset !== 0) {
+            queryString += `
+                OFFSET ${offset}
+            `;
+        }
+    }
+
+    return {
+        query: `${queryString};`,
+        params: queryParams.reduce((obj, value, key) => {
+            return Object.assign({
+                [`p${key}`]: value
+            }, obj);
+        }, {})
+    };
+
+    function addParams(param) {
+        queryParams.push(param);
+        return `p${queryParams.length - 1}`;
+    }
+}
