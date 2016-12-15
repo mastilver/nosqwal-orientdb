@@ -106,13 +106,18 @@ function buildQuery(collectionName, queryOptions) {
         queryString += ` WHERE ${whereString}`;
     }
 
-    orderBy.forEach(order => {
+    const orderByString = orderBy.map(order => {
         const asc = order[1] == null || order[1] === true;
 
-        queryString += `
-            ORDER BY ${order[0]} ${asc ? 'ASC' : 'DESC'}
+        return `
+            ${order[0]} ${asc ? 'ASC' : 'DESC'}
         `;
-    });
+    })
+    .join(', ');
+
+    if (orderByString != '') {
+        queryString += ` ORDER BY ${orderByString}`;
+    }
 
     if (limit != null) {
         queryString += `
