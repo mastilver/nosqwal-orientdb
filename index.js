@@ -96,6 +96,12 @@ function buildQuery(collectionName, queryOptions) {
                     ${prop} = :${paramId}
                 `;
             }
+            case '$contains': {
+                const paramId = addParams(where[prop].$contains);
+                return `
+                    :${paramId} IN ${prop}
+                `;
+            }
             default:
                 throw new Error(`Operator: ${operator} not handled`);
         }
