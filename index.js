@@ -62,12 +62,15 @@ module.exports = function (options) {
                 },
 
                 query(queryOptions) {
-                    queryOptions = queryOptions || {};
+                    return Promise.resolve()
+                    .then(() => {
+                        queryOptions = queryOptions || {};
 
-                    const sql = buildQuery(collectionName, queryOptions);
+                        const sql = buildQuery(collectionName, queryOptions);
 
-                    return db.query(sql.query, {
-                        params: sql.params
+                        return db.query(sql.query, {
+                            params: sql.params
+                        });
                     });
                 }
             };
