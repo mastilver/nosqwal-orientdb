@@ -26,7 +26,7 @@ module.exports = function (options) {
         defineCollection(collectionName) {
             // NOTE: catching the error here as it will throws if the collection is already defined
             const classP = db.class.create(collectionName)
-                             .catch(() => {});
+                             .catch(() => db.class.get(collectionName));
 
             return {
                 get(id) {
