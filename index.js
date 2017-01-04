@@ -30,12 +30,7 @@ module.exports = function (options) {
 
             return {
                 get(id) {
-                    return db.record.get(id)
-                        .then(doc => {
-                            return Object.assign(doc, {
-                                id: doc['@rid'].toString()
-                            });
-                        });
+                    return db.record.get(id);
                 },
 
                 create(doc) {
@@ -43,9 +38,9 @@ module.exports = function (options) {
                         return c.create(doc);
                     })
                     .then(createdDoc => {
-                        return Object.assign(createdDoc, {
+                        return this.update(Object.assign(createdDoc, {
                             id: createdDoc['@rid'].toString()
-                        });
+                        }));
                     });
                 },
 
