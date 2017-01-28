@@ -96,10 +96,52 @@ function buildQuery(collectionName, queryOptions) {
                     ${prop} = :${paramId}
                 `;
             }
+            case '$ne': {
+                const paramId = addParams(where[prop].$ne);
+
+                return `
+                    ${prop} <> :${paramId}
+                `;
+            }
+            case '$gt': {
+                const paramId = addParams(where[prop].$gt);
+
+                return `
+                    ${prop} > :${paramId}
+                `;
+            }
+            case '$gte': {
+                const paramId = addParams(where[prop].$gte);
+
+                return `
+                    ${prop} >= :${paramId}
+                `;
+            }
+            case '$lt': {
+                const paramId = addParams(where[prop].$lt);
+
+                return `
+                    ${prop} < :${paramId}
+                `;
+            }
+            case '$lte': {
+                const paramId = addParams(where[prop].$lte);
+
+                return `
+                    ${prop} <= :${paramId}
+                `;
+            }
             case '$contains': {
                 const paramId = addParams(where[prop].$contains);
                 return `
                     :${paramId} IN ${prop}
+                `;
+            }
+            case '$in': {
+                const paramId = addParams(where[prop].$in);
+
+                return `
+                    ${prop} IN :${paramId}
                 `;
             }
             default:
